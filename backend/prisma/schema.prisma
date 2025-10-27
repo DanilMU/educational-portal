@@ -1,9 +1,132 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// Пользовательская модель
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  role         Role          @default(STUDENT)
+  firstName    String?
+  lastName     String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  progress     UserProgress[]
+  certificates Certificate[]
+}
+
+// Роли пользователей
+enum Role {
+  STUDENT
+  ADMIN
+  MODERATOR
+}
+
+// Модель предмета (курса)
+model Subject {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  topics       Topic[]
+  certificates Certificate[]
+}
+
+// Модель темы
+model Topic {
+  id        Int      @id @default(autoincrement())
+  title     String
+  subjectId Int
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  lessons   Lesson[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Модель урока
+model Lesson {
+  id        Int            @id @default(autoincrement())
+  title     String
+  content   String
+  topicId   Int
+  topic     Topic          @relation(fields: [topicId], references: [id])
+  quiz      Quiz?
+  progress  UserProgress[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+// Модель теста
+model Quiz {
+  id        Int        @id @default(autoincrement())
+  title     String
+  lessonId  Int        @unique
+  lesson    Lesson     @relation(fields: [lessonId], references: [id])
+  questions Question[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+// Модель вопроса
+model Question {
+  id        Int          @id @default(autoincrement())
+  text      String
+  type      QuestionType
+  quizId    Int
+  quiz      Quiz         @relation(fields: [quizId], references: [id])
+  answers   Answer[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+// Типы вопросов
+enum QuestionType {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+}
+
+// Модель ответа
+model Answer {
+  id         Int      @id @default(autoincrement())
+  text       String
+  isCorrect  Boolean
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// Модель прогресса пользователя
+model UserProgress {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  lessonId    Int
+  lesson      Lesson    @relation(fields: [lessonId], references: [id])
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, lessonId])
+}
+
+// Модель сертификата
+model Certificate {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  subjectId Int
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  issuedAt  DateTime @default(now())
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
