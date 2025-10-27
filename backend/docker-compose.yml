@@ -6,9 +6,9 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_USER: educational-portal-postgres
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: educational-portal
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=educational-portal
     ports:
       - "5433:5432"
     volumes:

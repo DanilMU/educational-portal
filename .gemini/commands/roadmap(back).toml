@@ -1,0 +1,114 @@
+Ты опытный backend разработчик на NestJS. Создай детальную структуру проекта для образовательного портала со следующими требованиями:
+
+ТЕХНОЛОГИИ:
+- NestJS с TypeScript
+- Prisma ORM с PostgreSQL
+- Docker для базы данных
+- JWT аутентификация
+- REST API
+- Модульная архитектура
+
+ОСНОВНЫЕ МОДУЛИ:
+1. Аутентификация (JWT, регистрация, логин, refresh tokens)
+2. Пользователи (роли: student, admin, moderator)
+3. Предметы (Subjects) - например "Охрана труда"
+4. Темы (Topics) - вложенные в предметы
+5. Уроки (Lessons) - с поддержкой rich text и файлов
+6. Тесты (Quizzes) - разные типы вопросов
+7. Прогресс пользователей
+8. Сертификаты (PDF генерация)
+9. Файлы (загрузка в S3 - Selectel)
+10. Уведомления (email через Resend, Telegram)
+
+ЗАДАЧА:
+Создай полную файловую структуру проекта (дерево папок до 3-го уровня) с описанием назначения каждой директории. Включи:
+
+- Модульную структуру NestJS
+- Конфигурационные файлы
+- Docker настройки
+- Prisma схему
+- DTO и интерфейсы
+- Guards и декораторы
+- Конфигурацию окружений
+
+Формат вывода: Markdown с деревом директорий и кратким описанием каждого файла/папки.
+
+```
+backend/
+├── prisma/
+│   └── schema.prisma         # Схема данных Prisma (модели, отношения)
+├── src/
+│   ├── app.module.ts           # Главный модуль приложения
+│   ├── main.ts                 # Точка входа в приложение
+│   │
+│   ├── auth/                   # Модуль аутентификации
+│   │   ├── auth.module.ts
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   ├── dto/
+│   │   ├── guards/             # Guards (JWT, Roles)
+│   │   └── strategies/         # Passport.js стратегии (JWT)
+│   │
+│   ├── users/                  # Модуль пользователей
+│   │   ├── users.module.ts
+│   │   ├── users.controller.ts
+│   │   ├── users.service.ts
+│   │   └── dto/
+│   │
+│   ├── subjects/               # Модуль предметов
+│   │   ├── subjects.module.ts
+│   │   ├── subjects.controller.ts
+│   │   ├── subjects.service.ts
+│   │   └── dto/
+│   │
+│   ├── topics/                 # Модуль тем
+│   │   ├── topics.module.ts
+│   │   ├── topics.controller.ts
+│   │   ├── topics.service.ts
+│   │   └── dto/
+│   │
+│   ├── lessons/                # Модуль уроков
+│   │   ├── lessons.module.ts
+│   │   ├── lessons.controller.ts
+│   │   ├── lessons.service.ts
+│   │   └── dto/
+│   │
+│   ├── quizzes/                # Модуль тестов
+│   │   ├── quizzes.module.ts
+│   │   ├── quizzes.controller.ts
+│   │   ├── quizzes.service.ts
+│   │   └── dto/
+│   │
+│   ├── progress/               # Модуль прогресса
+│   │   ├── progress.module.ts
+│   │   ├── progress.controller.ts
+│   │   ├── progress.service.ts
+│   │   └── dto/
+│   │
+│   ├── certificates/           # Модуль сертификатов
+│   │   ├── certificates.module.ts
+│   │   ├── certificates.controller.ts
+│   │   ├── certificates.service.ts
+│   │   └── dto/
+│   │
+│   ├── files/                  # Модуль для работы с файлами
+│   │   ├── files.module.ts
+│   │   ├── files.service.ts
+│   │   └── files.controller.ts
+│   │
+│   ├── notifications/          # Модуль уведомлений
+│   │   ├── notifications.module.ts
+│   │   └── notifications.service.ts
+│   │
+│   ├── common/                 # Общие компоненты
+│   │   ├── decorators/         # Декораторы (e.g., User, Roles)
+│   │   └── interfaces/         # Глобальные интерфейсы
+│   │
+│   └── config/                 # Файлы конфигурации
+│       ├── cors.config.ts
+│       └── index.ts
+│
+└── test/
+    ├── app.e2e-spec.ts
+    └── jest-e2e.json
+```
