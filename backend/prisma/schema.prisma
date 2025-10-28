@@ -9,14 +9,14 @@ datasource db {
 
 // Пользовательская модель
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  password     String
-  role         Role          @default(STUDENT)
+  id           String         @id @default(nanoid())
   firstName    String?
   lastName     String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  email        String         @unique
+  password     String
+  role         Role           @default(STUDENT)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   progress     UserProgress[]
   certificates Certificate[]
 }
@@ -30,7 +30,7 @@ enum Role {
 
 // Модель предмета (курса)
 model Subject {
-  id           Int           @id @default(autoincrement())
+  id           String        @id @default(nanoid())
   title        String
   description  String
   createdAt    DateTime      @default(now())
@@ -41,9 +41,9 @@ model Subject {
 
 // Модель темы
 model Topic {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(nanoid())
   title     String
-  subjectId Int
+  subjectId String
   subject   Subject  @relation(fields: [subjectId], references: [id])
   lessons   Lesson[]
   createdAt DateTime @default(now())
@@ -52,10 +52,10 @@ model Topic {
 
 // Модель урока
 model Lesson {
-  id        Int            @id @default(autoincrement())
+  id        String         @id @default(nanoid())
   title     String
   content   String
-  topicId   Int
+  topicId   String
   topic     Topic          @relation(fields: [topicId], references: [id])
   quiz      Quiz?
   progress  UserProgress[]
@@ -65,9 +65,9 @@ model Lesson {
 
 // Модель теста
 model Quiz {
-  id        Int        @id @default(autoincrement())
+  id        String     @id @default(nanoid())
   title     String
-  lessonId  Int        @unique
+  lessonId  String     @unique
   lesson    Lesson     @relation(fields: [lessonId], references: [id])
   questions Question[]
   createdAt DateTime   @default(now())
@@ -76,10 +76,10 @@ model Quiz {
 
 // Модель вопроса
 model Question {
-  id        Int          @id @default(autoincrement())
+  id        String       @id @default(nanoid())
   text      String
   type      QuestionType
-  quizId    Int
+  quizId    String
   quiz      Quiz         @relation(fields: [quizId], references: [id])
   answers   Answer[]
   createdAt DateTime     @default(now())
@@ -94,10 +94,10 @@ enum QuestionType {
 
 // Модель ответа
 model Answer {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(nanoid())
   text       String
   isCorrect  Boolean
-  questionId Int
+  questionId String
   question   Question @relation(fields: [questionId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -105,10 +105,10 @@ model Answer {
 
 // Модель прогресса пользователя
 model UserProgress {
-  id          Int       @id @default(autoincrement())
-  userId      Int
+  id          String    @id @default(nanoid())
+  userId      String
   user        User      @relation(fields: [userId], references: [id])
-  lessonId    Int
+  lessonId    String
   lesson      Lesson    @relation(fields: [lessonId], references: [id])
   isCompleted Boolean   @default(false)
   completedAt DateTime?
@@ -120,10 +120,10 @@ model UserProgress {
 
 // Модель сертификата
 model Certificate {
-  id        Int      @id @default(autoincrement())
-  userId    Int
+  id        String   @id @default(nanoid())
+  userId    String
   user      User     @relation(fields: [userId], references: [id])
-  subjectId Int
+  subjectId String
   subject   Subject  @relation(fields: [subjectId], references: [id])
   issuedAt  DateTime @default(now())
   url       String
