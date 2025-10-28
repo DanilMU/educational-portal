@@ -42,4 +42,4 @@ async function bootstrap() {
 }
 
 // Запускаем асинхронную функцию bootstrap.
-bootstrap();
+void bootstrap();

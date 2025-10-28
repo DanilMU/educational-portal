@@ -9,7 +9,7 @@ datasource db {
 
 // Пользовательская модель
 model User {
-  id           String         @id @default(nanoid())
+  id           String         @id @default(cuid())
   firstName    String?
   lastName     String?
   email        String         @unique
@@ -30,7 +30,7 @@ enum Role {
 
 // Модель предмета (курса)
 model Subject {
-  id           String        @id @default(nanoid())
+  id           String        @id @default(cuid())
   title        String
   description  String
   createdAt    DateTime      @default(now())
@@ -41,7 +41,7 @@ model Subject {
 
 // Модель темы
 model Topic {
-  id        String   @id @default(nanoid())
+  id        String   @id @default(cuid())
   title     String
   subjectId String
   subject   Subject  @relation(fields: [subjectId], references: [id])
@@ -52,7 +52,7 @@ model Topic {
 
 // Модель урока
 model Lesson {
-  id        String         @id @default(nanoid())
+  id        String         @id @default(cuid())
   title     String
   content   String
   topicId   String
@@ -65,7 +65,7 @@ model Lesson {
 
 // Модель теста
 model Quiz {
-  id        String     @id @default(nanoid())
+  id        String     @id @default(cuid())
   title     String
   lessonId  String     @unique
   lesson    Lesson     @relation(fields: [lessonId], references: [id])
@@ -76,7 +76,7 @@ model Quiz {
 
 // Модель вопроса
 model Question {
-  id        String       @id @default(nanoid())
+  id        String       @id @default(cuid())
   text      String
   type      QuestionType
   quizId    String
@@ -94,7 +94,7 @@ enum QuestionType {
 
 // Модель ответа
 model Answer {
-  id         String   @id @default(nanoid())
+  id         String   @id @default(cuid())
   text       String
   isCorrect  Boolean
   questionId String
@@ -105,7 +105,7 @@ model Answer {
 
 // Модель прогресса пользователя
 model UserProgress {
-  id          String    @id @default(nanoid())
+  id          String    @id @default(cuid())
   userId      String
   user        User      @relation(fields: [userId], references: [id])
   lessonId    String
@@ -120,7 +120,7 @@ model UserProgress {
 
 // Модель сертификата
 model Certificate {
-  id        String   @id @default(nanoid())
+  id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   subjectId String
