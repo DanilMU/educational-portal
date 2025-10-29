@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
@@ -17,6 +17,8 @@ async function bootstrap() {
 	const config = app.get(ConfigService);
 	// Создаем логгер для вывода сообщений.
 	const logger = new Logger(AppModule.name);
+
+	app.useGlobalPipes(new ValidationPipe());
 
 	// Включаем CORS с настройками из конфигурационного файла.
 	app.enableCors(getCorsConfig(config));

@@ -15,10 +15,12 @@ model User {
   email        String         @unique
   password     String
   role         Role           @default(STUDENT)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
   progress     UserProgress[]
   certificates Certificate[]
+
+  @@map("users")
 }
 
 // Роли пользователей
@@ -33,10 +35,12 @@ model Subject {
   id           String        @id @default(cuid())
   title        String
   description  String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
   topics       Topic[]
   certificates Certificate[]
+
+  @@map("subjects")
 }
 
 // Модель темы
@@ -44,10 +48,12 @@ model Topic {
   id        String   @id @default(cuid())
   title     String
   subjectId String
-  subject   Subject  @relation(fields: [subjectId], references: [id])
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   lessons   Lesson[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("topics")
 }
 
 // Модель урока
@@ -56,11 +62,13 @@ model Lesson {
   title     String
   content   String
   topicId   String
-  topic     Topic          @relation(fields: [topicId], references: [id])
+  topic     Topic          @relation(fields: [topicId], references: [id], onDelete: Cascade)
   quiz      Quiz?
   progress  UserProgress[]
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+
+  @@map("lessons")
 }
 
 // Модель теста
@@ -68,10 +76,12 @@ model Quiz {
   id        String     @id @default(cuid())
   title     String
   lessonId  String     @unique
-  lesson    Lesson     @relation(fields: [lessonId], references: [id])
+  lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   questions Question[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@map("quizzes")
 }
 
 // Модель вопроса
@@ -80,10 +90,12 @@ model Question {
   text      String
   type      QuestionType
   quizId    String
-  quiz      Quiz         @relation(fields: [quizId], references: [id])
+  quiz      Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
   answers   Answer[]
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  @@map("questions")
 }
 
 // Типы вопросов
@@ -98,35 +110,41 @@ model Answer {
   text       String
   isCorrect  Boolean
   questionId String
-  question   Question @relation(fields: [questionId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("answers")
 }
 
 // Модель прогресса пользователя
 model UserProgress {
   id          String    @id @default(cuid())
   userId      String
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   lessonId    String
-  lesson      Lesson    @relation(fields: [lessonId], references: [id])
+  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   isCompleted Boolean   @default(false)
   completedAt DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   @@unique([userId, lessonId])
+
+  @@map("user_progress")
 }
 
 // Модель сертификата
 model Certificate {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   subjectId String
-  subject   Subject  @relation(fields: [subjectId], references: [id])
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   issuedAt  DateTime @default(now())
   url       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("certificates")
 }
