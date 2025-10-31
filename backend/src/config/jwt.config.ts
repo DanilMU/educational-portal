@@ -8,7 +8,8 @@ export function getJwtConfig(configService: ConfigService): JwtModuleOptions {
 			algorithm: 'HS256'
 		},
 		verifyOptions: {
-			algorithms: ['HS256']
+			algorithms: ['HS256'],
+			ignoreExpiration: false
 		}
 	};
 }

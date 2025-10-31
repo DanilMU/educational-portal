@@ -1,13 +1,14 @@
 import {
 	ConflictException,
 	Injectable,
-	NotFoundException
+	NotFoundException,
+	UnauthorizedException
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { hash, verify } from 'argon2';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ms, StringValue } from 'src/common/utils';
 import { isDev } from 'src/common/utils/is-dev.util';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
@@ -67,19 +68,6 @@ export class AuthService {
 		return this.auth(res, user);
 	}
 
-	public async logout(res: Response) {
-		await this.setCookie(res, '', new Date(0));
-	}
-
-	private async auth(res: Response, user: User) {
-		const { accessToken, refreshToken, refreshTokenExpires } =
-			await this.generateTokens(user);
-
-		this.setCookie(res, refreshToken, refreshTokenExpires);
-
-		return { accessToken };
-	}
-
 	public async login(res: Response, dto: LoginDto) {
 		const { email, password } = dto;
 
@@ -97,6 +85,58 @@ export class AuthService {
 			throw new NotFoundException('Неверный логин или пароль');
 
 		return this.auth(res, user);
+	}
+
+	public async refresh(req: Request, res: Response) {
+		console.log('Cookies received:', req.cookies);
+
+		if (!req || !req.cookies)
+			throw new UnauthorizedException(
+				'Не удалось получить cookies авторизцаии'
+			);
+
+		const refreshToken = req.cookies['refreshToken'];
+
+		if (!refreshToken) {
+			throw new UnauthorizedException(
+				'Refresh token not found in cookies'
+			);
+		}
+
+		try {
+			console.log('Verifying refresh token...');
+			const payload: JwtPayload =
+				await this.jwtService.verifyAsync(refreshToken);
+			console.log('Verified payload:', payload);
+
+			const user = await this.prismaService.user.findUnique({
+				where: {
+					id: payload.id
+				}
+			});
+
+			if (!user) {
+				throw new UnauthorizedException('User not found');
+			}
+
+			return this.auth(res, user);
+		} catch (error) {
+			console.error('Refresh token verification failed:', error.message);
+			throw new UnauthorizedException('Invalid or expired refresh token');
+		}
+	}
+
+	public async logout(res: Response) {
+		return this.setCookie(res, '', new Date(0));
+	}
+
+	private async auth(res: Response, user: User) {
+		const { accessToken, refreshToken, refreshTokenExpires } =
+			await this.generateTokens(user);
+
+		this.setCookie(res, refreshToken, refreshTokenExpires);
+
+		return { accessToken };
 	}
 
 	private async generateTokens(user: User) {
@@ -130,8 +170,7 @@ export class AuthService {
 			domain: this.COOKIES_DOMAIN,
 			expires,
 			secure: !isDev(this.configService),
-			sameSite: 'lax',
-			signed: true
+			sameSite: 'lax'
 		});
 	}
 }
