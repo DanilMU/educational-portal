@@ -171,6 +171,7 @@ export class AuthService {
 			expires,
 			secure: !isDev(this.configService),
 			sameSite: 'lax'
+			//signed: true TODO: add to production
 		});
 	}
 }
