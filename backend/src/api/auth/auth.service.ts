@@ -41,7 +41,7 @@ export class AuthService {
 	}
 
 	public async register(res: Response, dto: RegisterRequest) {
-		const { firstName, lastName, email, password } = dto;
+		const { firstName, lastName, email, password, role } = dto;
 
 		const exists = await this.prismaService.user.findUnique({
 			where: {
@@ -61,7 +61,8 @@ export class AuthService {
 				firstName,
 				lastName,
 				email,
-				password: hashedPassword
+				password: hashedPassword,
+				role
 			}
 		});
 
@@ -97,10 +98,8 @@ export class AuthService {
 
 		const refreshToken = req.cookies['refreshToken'];
 
-		if (!refreshToken) {
-			throw new UnauthorizedException(
-				'Refresh token not found in cookies'
-			);
+		if (typeof refreshToken !== 'string') {
+			throw new UnauthorizedException('Invalid refresh token');
 		}
 
 		try {
@@ -121,12 +120,15 @@ export class AuthService {
 
 			return this.auth(res, user);
 		} catch (error) {
-			console.error('Refresh token verification failed:', error.message);
+			console.error(
+				'Refresh token verification failed:',
+				(error as Error).message
+			);
 			throw new UnauthorizedException('Invalid or expired refresh token');
 		}
 	}
 
-	public async logout(res: Response) {
+	public logout(res: Response) {
 		return this.setCookie(res, '', new Date(0));
 	}
 

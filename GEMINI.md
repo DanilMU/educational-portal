@@ -1,43 +1,132 @@
+# Gemini Code Assistant Context
+
 ## Project Overview
 
-This is the backend for an educational portal, built with the NestJS framework. It uses TypeScript and follows a modular architecture. Key features include user authentication (JWT), course and lesson management, quizzes, and progress tracking. The database is PostgreSQL, managed with the Prisma ORM.
+This project is an educational portal for occupational safety and other subjects. It is a monorepo containing a **Next.js frontend** and a **NestJS backend**.
 
-## Building and Running
+- **`frontend/`**: The Next.js application that serves as the user interface.
+- **`backend/`**: The NestJS application that provides the REST API and business logic.
 
-The project is managed with `yarn`. The main commands are located in the `backend/` directory.
+The project uses `yarn` as the package manager.
 
-**Installation:**
-```bash
-cd backend
-yarn install
-```
+---
 
-**Running the app:**
+## Backend (`backend/`)
 
-*   **Development mode:** `yarn start:dev` (with file watching)
-*   **Production mode:** `yarn start:prod` (after building)
+The backend is a [NestJS](https://nestjs.com/) application responsible for handling business logic, data storage, and providing a RESTful API for the frontend.
 
-**Building the app:**
-```bash
-yarn build
-```
+### Key Technologies
 
-**Testing:**
+- **Framework**: NestJS
+- **Language**: TypeScript
+- **Database ORM**: Prisma
+- **Database**: PostgreSQL (managed via Docker)
+- **Authentication**: JWT (JSON Web Tokens)
+- **API Documentation**: Swagger
 
-*   **Unit tests:** `yarn test`
-*   **End-to-end tests:** `yarn test:e2e`
+### Getting Started
 
-**Database:**
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
 
-The project uses Prisma for database migrations and management.
-*   **Run migrations:** `yarn prisma migrate dev`
-*   **Generate Prisma client:** `yarn prisma generate`
+2.  **Install dependencies:**
+    ```bash
+    yarn install
+    ```
 
-## Development Conventions
+3.  **Start the database:**
+    Make sure you have Docker installed and running.
+    ```bash
+    docker-compose up -d
+    ```
 
-*   **Code Style:** The project uses Prettier for code formatting and ESLint for linting.
-    *   **Format code:** `yarn format`
-    *   **Lint code:** `yarn lint`
-*   **Framework:** The backend is built with NestJS. Follow the official NestJS conventions and documentation.
-*   **API Documentation:** Swagger is used for API documentation, available at `/api` when the application is running.
-*   **Commits:** Commits should follow the Conventional Commits specification.
+4.  **Run database migrations:**
+    ```bash
+    yarn prisma migrate dev
+    ```
+
+5.  **Run the application in development mode:**
+    This will start the server with hot-reloading at `http://localhost:3000`.
+    ```bash
+    yarn run start:dev
+    ```
+
+### Other Useful Commands
+
+- **Build the application:**
+  ```bash
+  yarn run build
+  ```
+- **Run in production mode:**
+  ```bash
+  yarn run start:prod
+  ```
+- **Run tests:**
+  ```bash
+  # Unit tests
+  yarn run test
+
+  # End-to-end tests
+  yarn run test:e2e
+  ```
+- **Prisma commands:**
+  Use `yarn prisma` to run any Prisma command.
+  ```bash
+  # Open Prisma Studio
+  yarn prisma studio
+
+  # Generate Prisma Client
+  yarn prisma generate
+  ```
+
+### Development Conventions
+
+The file `project(backend).md` contains a detailed analysis and implementation plan for the backend. It outlines the required modules (`subjects`, `topics`, `lessons`, `quizzes`, etc.), the database schema, and the steps for future development. This file should be consulted before adding new features.
+
+---
+
+## Frontend (`frontend/`)
+
+The frontend is a [Next.js](https://nextjs.org/) application that provides the user interface for the educational portal.
+
+### Key Technologies
+
+- **Framework**: Next.js
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: `lucide-react` for icons.
+
+### Getting Started
+
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd frontend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    yarn install
+    ```
+
+3.  **Run the development server:**
+    This will start the server at `http://localhost:3000`.
+    ```bash
+    yarn dev
+    ```
+
+### Other Useful Commands
+
+- **Build for production:**
+  ```bash
+  yarn build
+  ```
+- **Start the production server:**
+  ```bash
+  yarn start
+  ```
+- **Lint files:**
+  ```bash
+  yarn lint
+  ```

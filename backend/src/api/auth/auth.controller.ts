@@ -34,7 +34,7 @@ export class AuthController {
 		res: Response,
 		@Body() dto: RegisterRequest
 	) {
-		return await this.authService.register(res, dto);
+		return this.authService.register(res, dto);
 	}
 
 	@ApiOperation({
@@ -53,7 +53,7 @@ export class AuthController {
 		res: Response,
 		@Body() dto: LoginRequest
 	) {
-		return await this.authService.login(res, dto);
+		return this.authService.login(res, dto);
 	}
 
 	@ApiOperation({
@@ -69,7 +69,7 @@ export class AuthController {
 		@Req() req: Request,
 		@Res({ passthrough: true }) res: Response
 	) {
-		return await this.authService.refresh(req, res);
+		return this.authService.refresh(req, res);
 	}
 
 	@ApiOperation({
@@ -77,12 +77,12 @@ export class AuthController {
 		description: 'Clears authentication cookies'
 	})
 	@Post('logout')
-	public async logout(
+	public logout(
 		@Res({
 			passthrough: true
 		})
 		res: Response
 	) {
-		return await this.authService.logout(res);
+		return this.authService.logout(res);
 	}
 }
