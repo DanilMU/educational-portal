@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
-import { User } from '@prisma/client';
-import { Authorized, Protected } from 'src/common/decorators';
+import { Role, User } from '@prisma/client';
+import { Authorized, Protected, Roles } from 'src/common/decorators';
+import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
 
 import { GetMeDto } from './dto';
 import { UsersService } from './users.service';
@@ -15,5 +16,13 @@ export class UsersController {
 	@ApiOkResponse({ type: GetMeDto })
 	public getMe(@Authorized() user: User): GetMeDto {
 		return this.usersService.getMe(user);
+	}
+
+	@Roles(Role.ADMIN)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Get()
+	@ApiOkResponse({ type: [GetMeDto] })
+	public async getAllUsers(): Promise<User[]> {
+		return this.usersService.getAllUsers();
 	}
 }
