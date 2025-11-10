@@ -1,8 +1,15 @@
-import { Controller, Post, Body, Get, Param, UseGuards, ForbiddenException } from '@nestjs/common';
-import { Role } from '@prisma/client';
+import {
+	Body,
+	Controller,
+	ForbiddenException,
+	Get,
+	Param,
+	Post,
+	UseGuards
+} from '@nestjs/common';
+import { Role, User } from '@prisma/client';
 import { GetUser, Roles } from 'src/common/decorators';
-import { RolesGuard } from 'src/common/guards';
-import { User } from 'src/common/interfaces';
+import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
 
 import { CertificatesService } from './certificates.service';
 import { CreateCertificateDto } from './dto';
@@ -26,12 +33,14 @@ export class CertificatesController {
 	}
 
 	@Get('/user/:userId')
-	@UseGuards(RolesGuard)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	findByUser(@Param('userId') userId: string, @GetUser() user: User) {
 		// Разрешаем доступ, если пользователь запрашивает свои собственные сертификаты
 		// или если пользователь является администратором.
 		if (user.id !== userId && user.role !== Role.ADMIN) {
-			throw new ForbiddenException('У вас нет прав на просмотр этих сертификатов.');
+			throw new ForbiddenException(
+				'У вас нет прав на просмотр этих сертификатов.'
+			);
 		}
 		return this.certificatesService.findByUser(userId);
 	}
