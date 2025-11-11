@@ -1,5 +1,16 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { Type } from 'class-transformer';
+import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
 
-import { CreateQuizDto } from './create-quiz.dto';
+import { UpdateQuestionDto } from './update-question.dto';
 
-export class UpdateQuizDto extends PartialType(CreateQuizDto) {}
+export class UpdateQuizDto {
+	@IsString()
+	@IsOptional()
+	title?: string;
+
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => UpdateQuestionDto)
+	@IsOptional()
+	questions?: UpdateQuestionDto[];
+}

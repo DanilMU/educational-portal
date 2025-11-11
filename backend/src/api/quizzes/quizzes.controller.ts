@@ -8,7 +8,7 @@ import {
 	Post
 } from '@nestjs/common';
 
-import { CreateQuizDto, UpdateQuizDto } from './dto';
+import { CreateQuizDto, SubmitQuizDto, UpdateQuizDto } from './dto';
 import { QuizzesService } from './quizzes.service';
 
 @Controller('quizzes')
@@ -38,5 +38,10 @@ export class QuizzesController {
 	@Delete(':id')
 	remove(@Param('id') id: string) {
 		return this.quizzesService.remove(id);
+	}
+
+	@Post(':id/submit')
+	submit(@Param('id') id: string, @Body() submitQuizDto: SubmitQuizDto) {
+		return this.quizzesService.submit(id, submitQuizDto);
 	}
 }
