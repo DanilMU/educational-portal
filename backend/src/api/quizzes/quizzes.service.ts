@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
 
+import { ProgressService } from '../progress/progress.service';
+
 import {
 	CreateQuizDto,
 	QuizResultDto,
@@ -10,7 +12,10 @@ import {
 
 @Injectable()
 export class QuizzesService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly progressService: ProgressService
+	) {}
 
 	create(createQuizDto: CreateQuizDto) {
 		const { questions, ...rest } = createQuizDto;
@@ -42,8 +47,8 @@ export class QuizzesService {
 		});
 	}
 
-	findOne(id: string) {
-		return this.prisma.quiz.findUnique({
+	async findOne(id: string) {
+		const quiz = await this.prisma.quiz.findUnique({
 			where: { id },
 			include: {
 				questions: {
@@ -53,6 +58,12 @@ export class QuizzesService {
 				}
 			}
 		});
+
+		if (!quiz) {
+			throw new NotFoundException(`Quiz with ID ${id} not found`);
+		}
+
+		return quiz;
 	}
 
 	async update(id: string, updateQuizDto: UpdateQuizDto) {
@@ -135,6 +146,7 @@ export class QuizzesService {
 	}
 
 	async submit(
+		userId: string,
 		quizId: string,
 		submitQuizDto: SubmitQuizDto
 	): Promise<QuizResultDto> {
@@ -174,9 +186,17 @@ export class QuizzesService {
 			}
 		}
 
+		const totalQuestions = quiz.questions.length;
+		if (score > 0 && score === totalQuestions) {
+			await this.progressService.markLessonAsCompleted(
+				userId,
+				quiz.lessonId
+			);
+		}
+
 		return {
 			score,
-			totalQuestions: quiz.questions.length
+			totalQuestions
 		};
 	}
 

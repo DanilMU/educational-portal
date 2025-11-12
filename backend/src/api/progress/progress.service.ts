@@ -135,4 +135,25 @@ export class ProgressService {
 			}
 		});
 	}
+
+	async markLessonAsCompleted(userId: string, lessonId: string) {
+		return this.prisma.userProgress.upsert({
+			where: {
+				userId_lessonId: {
+					userId,
+					lessonId
+				}
+			},
+			create: {
+				userId,
+				lessonId,
+				isCompleted: true,
+				completedAt: new Date()
+			},
+			update: {
+				isCompleted: true,
+				completedAt: new Date()
+			}
+		});
+	}
 }

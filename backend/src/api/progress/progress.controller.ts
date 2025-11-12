@@ -5,9 +5,12 @@ import {
 	Get,
 	Param,
 	Patch,
-	Post
+	Post,
+	UseGuards
 } from '@nestjs/common';
-import { Authorized, Protected } from 'src/common/decorators';
+import { Role } from '@prisma/client';
+import { Authorized, Roles } from 'src/common/decorators';
+import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
 
 import { CreateProgressDto, ProgressDto, UpdateProgressDto } from './dto';
 import { ProgressService } from './progress.service';
@@ -17,7 +20,8 @@ export class ProgressController {
 	constructor(private readonly progressService: ProgressService) {}
 
 	@Post()
-	@Protected()
+	@Roles(Role.ADMIN, Role.MODERATOR)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	create(
 		@Authorized('id') userId: string,
 		@Body() createProgressDto: CreateProgressDto
@@ -26,13 +30,13 @@ export class ProgressController {
 	}
 
 	@Get()
-	@Protected()
+	@UseGuards(JwtAuthGuard)
 	findAll(@Authorized('id') userId: string): Promise<ProgressDto[]> {
 		return this.progressService.findAll(userId);
 	}
 
 	@Get(':lessonId')
-	@Protected()
+	@UseGuards(JwtAuthGuard)
 	findOne(
 		@Authorized('id') userId: string,
 		@Param('lessonId') lessonId: string
@@ -41,7 +45,8 @@ export class ProgressController {
 	}
 
 	@Patch(':lessonId')
-	@Protected()
+	@Roles(Role.ADMIN, Role.MODERATOR)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	update(
 		@Authorized('id') userId: string,
 		@Param('lessonId') lessonId: string,
@@ -51,7 +56,8 @@ export class ProgressController {
 	}
 
 	@Delete(':lessonId')
-	@Protected()
+	@Roles(Role.ADMIN, Role.MODERATOR)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	remove(
 		@Authorized('id') userId: string,
 		@Param('lessonId') lessonId: string

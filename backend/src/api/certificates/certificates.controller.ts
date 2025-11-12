@@ -5,9 +5,11 @@ import {
 	Get,
 	Param,
 	Post,
+	Res,
 	UseGuards
 } from '@nestjs/common';
 import { Role, User } from '@prisma/client';
+import { Response } from 'express';
 import { GetUser, Roles } from 'src/common/decorators';
 import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
 
@@ -47,5 +49,22 @@ export class CertificatesController {
 	@Get(':id')
 	findOne(@Param('id') id: string, @GetUser() user: User) {
 		return this.certificatesService.findOne(id, user);
+	}
+
+	@Get(':id/download')
+	async download(
+		@Param('id') id: string,
+		@GetUser() user: User,
+		@Res() res: Response
+	) {
+		const pdfBuffer = await this.certificatesService.generatePdf(id, user);
+
+		res.set({
+			'Content-Type': 'application/pdf',
+			'Content-Length': pdfBuffer.length,
+			'Content-Disposition': `attachment; filename="certificate-${id}.pdf"`
+		});
+
+		res.send(pdfBuffer);
 	}
 }

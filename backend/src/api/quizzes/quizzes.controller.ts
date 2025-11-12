@@ -34,7 +34,7 @@ export class QuizzesController {
 
 	@Get(':id')
 	@UseGuards(JwtAuthGuard)
-	findOne(@Param('id') id: string) {
+	async findOne(@Param('id') id: string) {
 		return this.quizzesService.findOne(id);
 	}
 
@@ -54,7 +54,11 @@ export class QuizzesController {
 
 	@Post(':id/submit')
 	@UseGuards(JwtAuthGuard)
-	submit(@Param('id') id: string, @Body() submitQuizDto: SubmitQuizDto) {
-		return this.quizzesService.submit(id, submitQuizDto);
+	submit(
+		@Authorized('id') userId: string,
+		@Param('id') id: string,
+		@Body() submitQuizDto: SubmitQuizDto
+	) {
+		return this.quizzesService.submit(userId, id, submitQuizDto);
 	}
 }
