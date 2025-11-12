@@ -9,13 +9,13 @@ import {
 
 export class CreateUserDto {
 	@IsEmail()
-	public email: string;
+	public email!: string;
 
 	@MinLength(8, {
 		message: 'Password must be at least 8 characters long'
 	})
 	@IsString()
-	public password: string;
+	public password!: string;
 
 	@IsString()
 	@IsOptional()

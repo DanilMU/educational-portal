@@ -5,5 +5,5 @@ export class AuthResponse {
 		example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
 		description: 'Access token used for authorization'
 	})
-	public accessToken: string;
+	public accessToken!: string;
 }

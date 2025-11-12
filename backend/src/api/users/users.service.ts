@@ -52,4 +52,14 @@ export class UsersService {
 	public async getAllUsers(): Promise<User[]> {
 		return this.prismaService.user.findMany();
 	}
+
+	public async updateMe(id: string, dto: UpdateUserDto): Promise<User> {
+		if (dto.password) {
+			dto.password = await hash(dto.password);
+		}
+		return this.prismaService.user.update({
+			where: { id },
+			data: dto
+		});
+	}
 }

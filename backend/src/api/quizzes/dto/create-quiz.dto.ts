@@ -6,14 +6,14 @@ import { CreateQuestionDto } from './create-question.dto';
 export class CreateQuizDto {
 	@IsString()
 	@IsNotEmpty()
-	title: string;
+	title!: string;
 
 	@IsString()
 	@IsNotEmpty()
-	lessonId: string;
+	lessonId!: string;
 
 	@IsArray()
 	@ValidateNested({ each: true })
 	@Type(() => CreateQuestionDto)
-	questions: CreateQuestionDto[];
+	questions!: CreateQuestionDto[];
 }

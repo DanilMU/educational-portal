@@ -8,7 +8,7 @@ export class LoginRequest {
 	})
 	@IsEmail()
 	@IsNotEmpty()
-	public email: string;
+	public email!: string;
 
 	@ApiProperty({
 		example: 'strongPassword123',
@@ -17,5 +17,5 @@ export class LoginRequest {
 	@IsString()
 	@IsNotEmpty()
 	@MinLength(6)
-	public password: string;
+	public password!: string;
 }

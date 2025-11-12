@@ -15,6 +15,7 @@ import { CertificatesService } from './certificates.service';
 import { CreateCertificateDto } from './dto';
 
 @Controller('certificates')
+@UseGuards(JwtAuthGuard)
 export class CertificatesController {
 	constructor(private readonly certificatesService: CertificatesService) {}
 
@@ -33,10 +34,8 @@ export class CertificatesController {
 	}
 
 	@Get('/user/:userId')
-	@UseGuards(JwtAuthGuard, RolesGuard)
+	@UseGuards(RolesGuard)
 	findByUser(@Param('userId') userId: string, @GetUser() user: User) {
-		// Разрешаем доступ, если пользователь запрашивает свои собственные сертификаты
-		// или если пользователь является администратором.
 		if (user.id !== userId && user.role !== Role.ADMIN) {
 			throw new ForbiddenException(
 				'У вас нет прав на просмотр этих сертификатов.'
@@ -46,7 +45,7 @@ export class CertificatesController {
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.certificatesService.findOne(id);
+	findOne(@Param('id') id: string, @GetUser() user: User) {
+		return this.certificatesService.findOne(id, user);
 	}
 }

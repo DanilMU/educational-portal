@@ -3,11 +3,11 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class CreateTopicDto {
 	@IsString()
 	@IsNotEmpty()
-	title: string;
+	title!: string;
 
 	@IsString()
 	@IsNotEmpty()
-	subjectId: string;
+	subjectId!: string;
 
 	@IsString()
 	@IsOptional()

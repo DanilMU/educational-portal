@@ -86,7 +86,7 @@ export class QuizzesService {
 				}
 
 				for (const questionDto of questions) {
-					const { answers, ...questionData } = questionDto;
+					const { answers } = questionDto;
 					const upsertedQuestion = await tx.question.upsert({
 						where: { id: questionDto.id || '' },
 						create: {

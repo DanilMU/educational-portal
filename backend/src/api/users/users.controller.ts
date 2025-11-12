@@ -52,4 +52,14 @@ export class UsersController {
 	public async getAllUsers(): Promise<User[]> {
 		return this.usersService.getAllUsers();
 	}
+
+	@Protected()
+	@Patch('@me')
+	@ApiOkResponse({ type: GetMeDto })
+	public async updateMe(
+		@Authorized() user: User,
+		@Body() dto: UpdateUserDto
+	): Promise<User> {
+		return this.usersService.updateMe(user.id, dto);
+	}
 }

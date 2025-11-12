@@ -96,7 +96,9 @@ export class AuthService {
 				'Не удалось получить cookies авторизцаии'
 			);
 
-		const refreshToken = req.cookies['refreshToken'];
+		const refreshToken = (req.cookies as Record<string, string>)[
+			'refreshToken'
+		];
 
 		if (typeof refreshToken !== 'string') {
 			throw new UnauthorizedException('Invalid refresh token');

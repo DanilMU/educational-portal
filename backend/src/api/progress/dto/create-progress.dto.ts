@@ -3,9 +3,9 @@ import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 export class CreateProgressDto {
 	@IsString()
 	@IsNotEmpty()
-	lessonId: string;
+	lessonId!: string;
 
 	@IsBoolean()
 	@IsNotEmpty()
-	isCompleted: boolean;
+	isCompleted!: boolean;
 }

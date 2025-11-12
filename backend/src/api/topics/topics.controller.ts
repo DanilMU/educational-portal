@@ -5,8 +5,12 @@ import {
 	Get,
 	Param,
 	Patch,
-	Post
+	Post,
+	UseGuards
 } from '@nestjs/common';
+import { Role } from '@prisma/client';
+import { Roles } from 'src/common/decorators';
+import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
 
 import { CreateTopicDto, UpdateTopicDto } from './dto';
 import { TopicsService } from './topics.service';
@@ -16,6 +20,8 @@ export class TopicsController {
 	constructor(private readonly topicsService: TopicsService) {}
 
 	@Post()
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.ADMIN, Role.MODERATOR)
 	create(@Body() createTopicDto: CreateTopicDto) {
 		return this.topicsService.create(createTopicDto);
 	}
@@ -31,11 +37,15 @@ export class TopicsController {
 	}
 
 	@Patch(':id')
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.ADMIN, Role.MODERATOR)
 	update(@Param('id') id: string, @Body() updateTopicDto: UpdateTopicDto) {
 		return this.topicsService.update(id, updateTopicDto);
 	}
 
 	@Delete(':id')
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.ADMIN, Role.MODERATOR)
 	remove(@Param('id') id: string) {
 		return this.topicsService.remove(id);
 	}

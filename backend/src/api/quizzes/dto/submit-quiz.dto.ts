@@ -7,5 +7,5 @@ export class SubmitQuizDto {
 	@IsArray()
 	@ValidateNested({ each: true })
 	@Type(() => UserAnswerDto)
-	answers: UserAnswerDto[];
+	answers!: UserAnswerDto[];
 }

@@ -1,8 +1,10 @@
 import {
 	BadRequestException,
+	ForbiddenException,
 	Injectable,
 	NotFoundException
 } from '@nestjs/common';
+import { Role } from '@prisma/client';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
 
 import { CreateCertificateDto } from './dto';
@@ -119,7 +121,7 @@ export class CertificatesService {
 		});
 	}
 
-	async findOne(id: string) {
+	async findOne(id: string, user: { id: string; role: Role }) {
 		const certificate = await this.prisma.certificate.findUnique({
 			where: { id },
 			include: {
@@ -137,6 +139,12 @@ export class CertificatesService {
 
 		if (!certificate) {
 			throw new NotFoundException('Сертификат не найден');
+		}
+
+		if (certificate.userId !== user.id && user.role !== Role.ADMIN) {
+			throw new ForbiddenException(
+				'У вас нет доступа к этому сертификату.'
+			);
 		}
 
 		return certificate;

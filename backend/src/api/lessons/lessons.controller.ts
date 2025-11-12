@@ -5,8 +5,12 @@ import {
 	Get,
 	Param,
 	Patch,
-	Post
+	Post,
+	UseGuards
 } from '@nestjs/common';
+import { Role } from '@prisma/client';
+import { Roles } from 'src/common/decorators';
+import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
 
 import { CreateLessonDto, UpdateLessonDto } from './dto';
 import { LessonsService } from './lessons.service';
@@ -16,6 +20,8 @@ export class LessonsController {
 	constructor(private readonly lessonsService: LessonsService) {}
 
 	@Post()
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.ADMIN, Role.MODERATOR)
 	create(@Body() createLessonDto: CreateLessonDto) {
 		return this.lessonsService.create(createLessonDto);
 	}
@@ -31,11 +37,15 @@ export class LessonsController {
 	}
 
 	@Patch(':id')
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.ADMIN, Role.MODERATOR)
 	update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
 		return this.lessonsService.update(id, updateLessonDto);
 	}
 
 	@Delete(':id')
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.ADMIN, Role.MODERATOR)
 	remove(@Param('id') id: string) {
 		return this.lessonsService.remove(id);
 	}

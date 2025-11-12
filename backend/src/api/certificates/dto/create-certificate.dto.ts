@@ -3,9 +3,9 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateCertificateDto {
 	@IsString()
 	@IsNotEmpty()
-	userId: string;
+	userId!: string;
 
 	@IsString()
 	@IsNotEmpty()
-	subjectId: string;
+	subjectId!: string;
 }

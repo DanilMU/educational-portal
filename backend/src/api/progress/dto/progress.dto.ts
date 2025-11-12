@@ -2,24 +2,24 @@ import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
 
 export class ProgressDto {
 	@IsString()
-	id: string;
+	id!: string;
 
 	@IsString()
-	userId: string;
+	userId!: string;
 
 	@IsString()
-	lessonId: string;
+	lessonId!: string;
 
 	@IsBoolean()
-	isCompleted: boolean;
+	isCompleted!: boolean;
 
 	@IsDate()
 	@IsOptional()
-	completedAt: Date | null;
+	completedAt!: Date | null;
 
 	@IsDate()
-	createdAt: Date;
+	createdAt!: Date;
 
 	@IsDate()
-	updatedAt: Date;
+	updatedAt!: Date;
 }

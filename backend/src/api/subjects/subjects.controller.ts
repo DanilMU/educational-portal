@@ -9,9 +9,9 @@ import {
 	UseGuards
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
-
 import { Roles } from 'src/common/decorators';
 import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
+
 import { CreateSubjectDto, UpdateSubjectDto } from './dto';
 import { SubjectsService } from './subjects.service';
 

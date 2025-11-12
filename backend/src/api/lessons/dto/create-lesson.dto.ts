@@ -3,13 +3,13 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateLessonDto {
 	@IsString()
 	@IsNotEmpty()
-	title: string;
+	title!: string;
 
 	@IsString()
 	@IsNotEmpty()
-	content: string;
+	content!: string;
 
 	@IsString()
 	@IsNotEmpty()
-	topicId: string;
+	topicId!: string;
 }

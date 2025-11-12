@@ -13,13 +13,13 @@ import { CreateAnswerDto } from './create-answer.dto';
 export class CreateQuestionDto {
 	@IsString()
 	@IsNotEmpty()
-	text: string;
+	text!: string;
 
 	@IsEnum(QuestionType)
-	type: QuestionType;
+	type!: QuestionType;
 
 	@IsArray()
 	@ValidateNested({ each: true })
 	@Type(() => CreateAnswerDto)
-	answers: CreateAnswerDto[];
+	answers!: CreateAnswerDto[];
 }

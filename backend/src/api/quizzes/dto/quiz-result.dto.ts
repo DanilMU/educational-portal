@@ -1,4 +1,4 @@
 export class QuizResultDto {
-	score: number;
-	totalQuestions: number;
+	score!: number;
+	totalQuestions!: number;
 }
