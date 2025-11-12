@@ -1,9 +1,7 @@
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsOptional } from 'class-validator';
 
 export class UpdateProgressDto {
-	@IsString()
-	lessonId: string;
-
 	@IsBoolean()
-	isCompleted: boolean;
+	@IsOptional()
+	isCompleted?: boolean;
 }

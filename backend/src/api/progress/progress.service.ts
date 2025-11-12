@@ -1,30 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
 
-import { UpdateProgressDto } from './dto';
+import { CreateProgressDto, UpdateProgressDto } from './dto';
 
 @Injectable()
 export class ProgressService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async updateProgress(
-		userId: string,
-		{ lessonId, isCompleted }: UpdateProgressDto
-	) {
+	async create(userId: string, createProgressDto: CreateProgressDto) {
+		const { lessonId, isCompleted } = createProgressDto;
 		const completedAt = isCompleted ? new Date() : null;
 
-		return this.prisma.userProgress.upsert({
-			where: {
-				userId_lessonId: {
-					userId,
-					lessonId
-				}
-			},
-			update: {
-				isCompleted,
-				completedAt
-			},
-			create: {
+		return this.prisma.userProgress.create({
+			data: {
 				userId,
 				lessonId,
 				isCompleted,
@@ -33,41 +21,118 @@ export class ProgressService {
 		});
 	}
 
-	async getProgressBySubject(userId: string, subjectId: string) {
-		const lessons = await this.prisma.lesson.findMany({
+	findAll(userId: string) {
+		return this.prisma.userProgress.findMany({
+			where: { userId },
+			include: {
+				lesson: {
+					select: {
+						id: true,
+						title: true,
+						topic: {
+							select: {
+								id: true,
+								title: true,
+								subject: {
+									select: {
+										id: true,
+										title: true
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+	}
+
+	async findOne(userId: string, lessonId: string) {
+		const progress = await this.prisma.userProgress.findUnique({
 			where: {
-				topic: {
-					subjectId: subjectId
+				userId_lessonId: {
+					userId,
+					lessonId
 				}
 			},
-			select: {
-				id: true
+			include: {
+				lesson: {
+					select: {
+						id: true,
+						title: true,
+						topic: {
+							select: {
+								id: true,
+								title: true,
+								subject: {
+									select: {
+										id: true,
+										title: true
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		});
 
-		const lessonIds = lessons.map(lesson => lesson.id);
-		const totalLessons = lessonIds.length;
-
-		if (totalLessons === 0) {
-			return {
-				totalLessons: 0,
-				completedLessons: 0
-			};
+		if (!progress) {
+			throw new NotFoundException(
+				`Progress for user ${userId} on lesson ${lessonId} not found`
+			);
 		}
 
-		const completedLessons = await this.prisma.userProgress.count({
+		return progress;
+	}
+
+	async update(
+		userId: string,
+		lessonId: string,
+		updateProgressDto: UpdateProgressDto
+	) {
+		const existingProgress = await this.prisma.userProgress.findUnique({
 			where: {
-				userId: userId,
-				lessonId: {
-					in: lessonIds
-				},
-				isCompleted: true
+				userId_lessonId: {
+					userId,
+					lessonId
+				}
 			}
 		});
 
-		return {
-			totalLessons,
-			completedLessons
-		};
+		if (!existingProgress) {
+			throw new NotFoundException(
+				`Progress for user ${userId} on lesson ${lessonId} not found`
+			);
+		}
+
+		const completedAt =
+			updateProgressDto.isCompleted && !existingProgress.completedAt
+				? new Date()
+				: existingProgress.completedAt;
+
+		return this.prisma.userProgress.update({
+			where: {
+				userId_lessonId: {
+					userId,
+					lessonId
+				}
+			},
+			data: {
+				...updateProgressDto,
+				completedAt
+			}
+		});
+	}
+
+	async remove(userId: string, lessonId: string) {
+		return this.prisma.userProgress.delete({
+			where: {
+				userId_lessonId: {
+					userId,
+					lessonId
+				}
+			}
+		});
 	}
 }

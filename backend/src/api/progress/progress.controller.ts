@@ -1,15 +1,15 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
-	HttpCode,
-	HttpStatus,
-	Post,
-	Query
+	Param,
+	Patch,
+	Post
 } from '@nestjs/common';
 import { Authorized, Protected } from 'src/common/decorators';
 
-import { UpdateProgressDto } from './dto';
+import { CreateProgressDto, ProgressDto, UpdateProgressDto } from './dto';
 import { ProgressService } from './progress.service';
 
 @Controller('progress')
@@ -18,20 +18,44 @@ export class ProgressController {
 
 	@Post()
 	@Protected()
-	@HttpCode(HttpStatus.OK)
-	updateProgress(
-		@Authorized() userId: string,
-		@Body() updateProgressDto: UpdateProgressDto
-	) {
-		return this.progressService.updateProgress(userId, updateProgressDto);
+	create(
+		@Authorized('id') userId: string,
+		@Body() createProgressDto: CreateProgressDto
+	): Promise<ProgressDto> {
+		return this.progressService.create(userId, createProgressDto);
 	}
 
 	@Get()
 	@Protected()
-	getProgress(
-		@Authorized() userId: string,
-		@Query('subjectId') subjectId: string
-	) {
-		return this.progressService.getProgressBySubject(userId, subjectId);
+	findAll(@Authorized('id') userId: string): Promise<ProgressDto[]> {
+		return this.progressService.findAll(userId);
+	}
+
+	@Get(':lessonId')
+	@Protected()
+	findOne(
+		@Authorized('id') userId: string,
+		@Param('lessonId') lessonId: string
+	): Promise<ProgressDto> {
+		return this.progressService.findOne(userId, lessonId);
+	}
+
+	@Patch(':lessonId')
+	@Protected()
+	update(
+		@Authorized('id') userId: string,
+		@Param('lessonId') lessonId: string,
+		@Body() updateProgressDto: UpdateProgressDto
+	): Promise<ProgressDto> {
+		return this.progressService.update(userId, lessonId, updateProgressDto);
+	}
+
+	@Delete(':lessonId')
+	@Protected()
+	remove(
+		@Authorized('id') userId: string,
+		@Param('lessonId') lessonId: string
+	): Promise<ProgressDto> {
+		return this.progressService.remove(userId, lessonId);
 	}
 }
