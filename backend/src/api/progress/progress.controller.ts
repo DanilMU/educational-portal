@@ -12,7 +12,12 @@ import { Role } from '@prisma/client';
 import { Authorized, Roles } from 'src/common/decorators';
 import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
 
-import { CreateProgressDto, ProgressDto, UpdateProgressDto } from './dto';
+import {
+	CompleteSubjectDto,
+	CreateProgressDto,
+	ProgressDto,
+	UpdateProgressDto
+} from './dto';
 import { ProgressService } from './progress.service';
 
 @Controller('progress')
@@ -40,7 +45,7 @@ export class ProgressController {
 	findOne(
 		@Authorized('id') userId: string,
 		@Param('lessonId') lessonId: string
-	): Promise<ProgressDto> {
+	): Promise<ProgressDto | null> {
 		return this.progressService.findOne(userId, lessonId);
 	}
 
@@ -63,5 +68,12 @@ export class ProgressController {
 		@Param('lessonId') lessonId: string
 	): Promise<ProgressDto> {
 		return this.progressService.remove(userId, lessonId);
+	}
+
+	@Post('complete-subject')
+	@Roles(Role.ADMIN, Role.MODERATOR)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	completeSubject(@Body() dto: CompleteSubjectDto) {
+		return this.progressService.completeAllLessonsInSubject(dto);
 	}
 }

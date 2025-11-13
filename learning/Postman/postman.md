@@ -1,21 +1,21 @@
-# Postman Collection for Educational Platform API
+# Коллекция Postman для API образовательной платформы
 
-This document outlines the collection of API requests for the Educational Platform.
+Этот документ описывает коллекцию запросов API для образовательной платформы.
 
-## Base URL
+## Базовый URL
 
-The base URL for all requests is `http://localhost:3000/api`.
+Базовый URL для всех запросов: `http://localhost:3000/api`.
 
 ---
 
-## 1. Authentication (`/auth`)
+## 1. Аутентификация (`/auth`)
 
-### 1.1. Register a new user
+### 1.1. Регистрация нового пользователя
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/auth/register`
-*   **Description:** Creates a new user account and returns an access token.
-*   **Body:** `raw` (JSON)
+*   **Описание:** Создает новую учетную запись пользователя и возвращает токен доступа.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -25,12 +25,12 @@ The base URL for all requests is `http://localhost:3000/api`.
     }
     ```
 
-### 1.2. Login an existing user
+### 1.2. Вход существующего пользователя
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/auth/login`
-*   **Description:** Authenticates a user and returns an access token.
-*   **Body:** `raw` (JSON)
+*   **Описание:** Аутентифицирует пользователя и возвращает токен доступа.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -39,38 +39,38 @@ The base URL for all requests is `http://localhost:3000/api`.
     }
     ```
 
-### 1.3. Refresh access token
+### 1.3. Обновление токена доступа
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/auth/refresh`
-*   **Description:** Generates a new access token using the refresh token stored in cookies. No body is required. The refresh token is sent automatically by the client (e.g., browser or Postman) if it was received from the login/register response.
+*   **Описание:** Генерирует новый токен доступа с использованием токена обновления, хранящегося в куках. Тело не требуется. Токен обновления автоматически отправляется клиентом (например, браузером или Postman), если он был получен в ответе на вход/регистрацию.
 
-### 1.4. Logout user
+### 1.4. Выход пользователя
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/auth/logout`
-*   **Description:** Clears the authentication cookies.
+*   **Описание:** Очищает куки аутентификации.
 
 ---
 
-## 2. Users (`/users`)
+## 2. Пользователи (`/users`)
 
-Requires `Authorization` header with `Bearer <accessToken>`.
+Требуется заголовок `Authorization` с `Bearer <accessToken>`.
 
-### 2.1. Get current user profile
+### 2.1. Получить профиль текущего пользователя
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/users/@me`
-*   **Description:** Retrieves the profile of the currently authenticated user.
+*   **Описание:** Возвращает профиль текущего аутентифицированного пользователя.
 *   **Auth:** Bearer Token.
 
-### 2.2. Update current user profile
+### 2.2. Обновить профиль текущего пользователя
 
-*   **Method:** `PATCH`
+*   **Метод:** `PATCH`
 *   **URL:** `{{baseUrl}}/users/@me`
-*   **Description:** Updates the profile of the currently authenticated user.
+*   **Описание:** Обновляет профиль текущего аутентифицированного пользователя.
 *   **Auth:** Bearer Token.
-*   **Body:** `raw` (JSON)
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -79,20 +79,20 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 2.3. Get all users (Admin only)
+### 2.3. Получить всех пользователей (только для администраторов)
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/users`
-*   **Description:** Retrieves a list of all users. Requires admin privileges.
-*   **Auth:** Bearer Token (from an admin user).
+*   **Описание:** Возвращает список всех пользователей. Требует права администратора.
+*   **Auth:** Bearer Token (от администратора).
 
-### 2.4. Create a new user (Admin only)
+### 2.4. Создать нового пользователя (только для администраторов)
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/users`
-*   **Description:** Creates a new user. Requires admin privileges.
-*   **Auth:** Bearer Token (from an admin user).
-*   **Body:** `raw` (JSON)
+*   **Описание:** Создает нового пользователя. Требует права администратора.
+*   **Auth:** Bearer Token (от администратора).
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -103,15 +103,15 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 2.5. Update a user (Admin only)
+### 2.5. Обновить пользователя (только для администраторов)
 
-*   **Method:** `PATCH`
+*   **Метод:** `PATCH`
 *   **URL:** `{{baseUrl}}/users/:id`
-*   **Description:** Updates a user by their ID. Requires admin privileges.
-*   **Auth:** Bearer Token (from an admin user).
-*   **Path Variables:**
-    *   `id`: The ID of the user to update.
-*   **Body:** `raw` (JSON)
+*   **Описание:** Обновляет пользователя по его ID. Требует права администратора.
+*   **Auth:** Bearer Token (от администратора).
+*   **Параметры пути:**
+    *   `id`: ID пользователя для обновления.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -122,29 +122,29 @@ Requires `Authorization` header with `Bearer <accessToken>`.
 
 ---
 
-## 3. Subjects (`/subjects`)
+## 3. Предметы (`/subjects`)
 
-### 3.1. Get all subjects
+### 3.1. Получить все предметы
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/subjects`
-*   **Description:** Retrieves a list of all subjects.
+*   **Описание:** Возвращает список всех предметов.
 
-### 3.2. Get a single subject
+### 3.2. Получить один предмет
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/subjects/:id`
-*   **Description:** Retrieves a single subject by its ID.
-*   **Path Variables:**
-    *   `id`: The ID of the subject to retrieve.
+*   **Описание:** Возвращает один предмет по его ID.
+*   **Параметры пути:**
+    *   `id`: ID предмета для получения.
 
-### 3.3. Create a new subject (Admin/Moderator only)
+### 3.3. Создать новый предмет (только для администраторов/модераторов)
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/subjects`
-*   **Description:** Creates a new subject. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Body:** `raw` (JSON)
+*   **Описание:** Создает новый предмет. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -153,15 +153,15 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 3.4. Update a subject (Admin/Moderator only)
+### 3.4. Обновить предмет (только для администраторов/модераторов)
 
-*   **Method:** `PATCH`
+*   **Метод:** `PATCH`
 *   **URL:** `{{baseUrl}}/subjects/:id`
-*   **Description:** Updates a subject by its ID. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `id`: The ID of the subject to update.
-*   **Body:** `raw` (JSON)
+*   **Описание:** Обновляет предмет по его ID. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `id`: ID предмета для обновления.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -169,40 +169,40 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 3.5. Delete a subject (Admin/Moderator only)
+### 3.5. Удалить предмет (только для администраторов/модераторов)
 
-*   **Method:** `DELETE`
+*   **Метод:** `DELETE`
 *   **URL:** `{{baseUrl}}/subjects/:id`
-*   **Description:** Deletes a subject by its ID. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `id`: The ID of the subject to delete.
+*   **Описание:** Удаляет предмет по его ID. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `id`: ID предмета для удаления.
 
 ---
 
-## 4. Topics (`/topics`)
+## 4. Темы (`/topics`)
 
-### 4.1. Get all topics
+### 4.1. Получить все темы
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/topics`
-*   **Description:** Retrieves a list of all topics.
+*   **Описание:** Возвращает список всех тем.
 
-### 4.2. Get a single topic
+### 4.2. Получить одну тему
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/topics/:id`
-*   **Description:** Retrieves a single topic by its ID.
-*   **Path Variables:**
-    *   `id`: The ID of the topic to retrieve.
+*   **Описание:** Возвращает одну тему по ее ID.
+*   **Параметры пути:**
+    *   `id`: ID темы для получения.
 
-### 4.3. Create a new topic (Admin/Moderator only)
+### 4.3. Создать новую тему (только для администраторов/модераторов)
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/topics`
-*   **Description:** Creates a new topic. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Body:** `raw` (JSON)
+*   **Описание:** Создает новую тему. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -211,15 +211,15 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 4.4. Update a topic (Admin/Moderator only)
+### 4.4. Обновить тему (только для администраторов/модераторов)
 
-*   **Method:** `PATCH`
+*   **Метод:** `PATCH`
 *   **URL:** `{{baseUrl}}/topics/:id`
-*   **Description:** Updates a topic by its ID. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `id`: The ID of the topic to update.
-*   **Body:** `raw` (JSON)
+*   **Описание:** Обновляет тему по ее ID. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `id`: ID темы для обновления.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -227,40 +227,40 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 4.5. Delete a topic (Admin/Moderator only)
+### 4.5. Удалить тему (только для администраторов/модераторов)
 
-*   **Method:** `DELETE`
+*   **Метод:** `DELETE`
 *   **URL:** `{{baseUrl}}/topics/:id`
-*   **Description:** Deletes a topic by its ID. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `id`: The ID of the topic to delete.
+*   **Описание:** Удаляет тему по ее ID. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `id`: ID темы для удаления.
 
 ---
 
-## 5. Lessons (`/lessons`)
+## 5. Уроки (`/lessons`)
 
-### 5.1. Get all lessons
+### 5.1. Получить все уроки
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/lessons`
-*   **Description:** Retrieves a list of all lessons.
+*   **Описание:** Возвращает список всех уроков.
 
-### 5.2. Get a single lesson
+### 5.2. Получить один урок
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/lessons/:id`
-*   **Description:** Retrieves a single lesson by its ID.
-*   **Path Variables:**
-    *   `id`: The ID of the lesson to retrieve.
+*   **Описание:** Возвращает один урок по его ID.
+*   **Параметры пути:**
+    *   `id`: ID урока для получения.
 
-### 5.3. Create a new lesson (Admin/Moderator only)
+### 5.3. Создать новый урок (только для администраторов/модераторов)
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/lessons`
-*   **Description:** Creates a new lesson. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Body:** `raw` (JSON)
+*   **Описание:** Создает новый урок. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -270,15 +270,15 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 5.4. Update a lesson (Admin/Moderator only)
+### 5.4. Обновить урок (только для администраторов/модераторов)
 
-*   **Method:** `PATCH`
+*   **Метод:** `PATCH`
 *   **URL:** `{{baseUrl}}/lessons/:id`
-*   **Description:** Updates a lesson by its ID. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `id`: The ID of the lesson to update.
-*   **Body:** `raw` (JSON)
+*   **Описание:** Обновляет урок по его ID. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `id`: ID урока для обновления.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -286,42 +286,42 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 5.5. Delete a lesson (Admin/Moderator only)
+### 5.5. Удалить урок (только для администраторов/модераторов)
 
-*   **Method:** `DELETE`
+*   **Метод:** `DELETE`
 *   **URL:** `{{baseUrl}}/lessons/:id`
-*   **Description:** Deletes a lesson by its ID. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `id`: The ID of the lesson to delete.
+*   **Описание:** Удаляет урок по его ID. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `id`: ID урока для удаления.
 
 ---
 
-## 6. Quizzes (`/quizzes`)
+## 6. Викторины (`/quizzes`)
 
-### 6.1. Get all quizzes
+### 6.1. Получить все викторины
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/quizzes`
-*   **Description:** Retrieves a list of all quizzes.
+*   **Описание:** Возвращает список всех викторин.
 *   **Auth:** Bearer Token.
 
-### 6.2. Get a single quiz
+### 6.2. Получить одну викторину
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/quizzes/:id`
-*   **Description:** Retrieves a single quiz by its ID.
+*   **Описание:** Возвращает одну викторину по ее ID.
 *   **Auth:** Bearer Token.
-*   **Path Variables:**
-    *   `id`: The ID of the quiz to retrieve.
+*   **Параметры пути:**
+    *   `id`: ID викторины для получения.
 
-### 6.3. Create a new quiz (Admin/Moderator only)
+### 6.3. Создать новую викторину (только для администраторов/модераторов)
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/quizzes`
-*   **Description:** Creates a new quiz. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Body:** `raw` (JSON)
+*   **Описание:** Создает новую викторину. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -339,15 +339,15 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 6.4. Update a quiz (Admin/Moderator only)
+### 6.4. Обновить викторину (только для администраторов/модераторов)
 
-*   **Method:** `PATCH`
+*   **Метод:** `PATCH`
 *   **URL:** `{{baseUrl}}/quizzes/:id`
-*   **Description:** Updates a quiz by its ID. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `id`: The ID of the quiz to update.
-*   **Body:** `raw` (JSON)
+*   **Описание:** Обновляет викторину по ее ID. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `id`: ID викторины для обновления.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -355,24 +355,24 @@ Requires `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 6.5. Delete a quiz (Admin/Moderator only)
+### 6.5. Удалить викторину (только для администраторов/модераторов)
 
-*   **Method:** `DELETE`
+*   **Метод:** `DELETE`
 *   **URL:** `{{baseUrl}}/quizzes/:id`
-*   **Description:** Deletes a quiz by its ID. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `id`: The ID of the quiz to delete.
+*   **Описание:** Удаляет викторину по ее ID. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `id`: ID викторины для удаления.
 
-### 6.6. Submit a quiz
+### 6.6. Отправить викторину
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/quizzes/:id/submit`
-*   **Description:** Submits a user's answers for a quiz and returns the result.
+*   **Описание:** Отправляет ответы пользователя на викторину и возвращает результат.
 *   **Auth:** Bearer Token.
-*   **Path Variables:**
-    *   `id`: The ID of the quiz to submit.
-*   **Body:** `raw` (JSON)
+*   **Параметры пути:**
+    *   `id`: ID викторины для отправки.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -387,104 +387,119 @@ Requires `Authorization` header with `Bearer <accessToken>`.
 
 ---
 
-## 7. Progress (`/progress`)
+## 7. Прогресс (`/progress`)
 
-All endpoints require `Authorization` header with `Bearer <accessToken>`.
+Все конечные точки требуют заголовок `Authorization` с `Bearer <accessToken>`.
 
-### 7.1. Get all progress for current user
+### 7.1. Получить весь прогресс для текущего пользователя
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/progress`
-*   **Description:** Retrieves all progress records for the currently authenticated user.
+*   **Описание:** Возвращает все записи прогресса для текущего аутентифицированного пользователя.
 *   **Auth:** Bearer Token.
 
-### 7.2. Get progress for a specific lesson
+### 7.2. Получить прогресс для конкретного урока
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/progress/:lessonId`
-*   **Description:** Retrieves the progress for a specific lesson for the currently authenticated user.
+*   **Описание:** Возвращает прогресс для конкретного урока для текущего аутентифицированного пользователя.
 *   **Auth:** Bearer Token.
-*   **Path Variables:**
-    *   `lessonId`: The ID of the lesson.
+*   **Параметры пути:**
+    *   `lessonId`: ID урока.
 
-### 7.3. Create a new progress record (Admin/Moderator only)
+### 7.3. Создать новую запись прогресса (только для администраторов/модераторов)
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/progress`
-*   **Description:** Creates a new progress record. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Body:** `raw` (JSON)
+*   **Описание:** Создает новую запись прогресса для аутентифицированного администратора/модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
       "lessonId": "lesson-id-goes-here",
-      "completed": true
+      "isCompleted": true
     }
     ```
 
-### 7.4. Update a progress record (Admin/Moderator only)
+### 7.4. Обновить запись прогресса (только для администраторов/модераторов)
 
-*   **Method:** `PATCH`
+*   **Метод:** `PATCH`
 *   **URL:** `{{baseUrl}}/progress/:lessonId`
-*   **Description:** Updates a progress record. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `lessonId`: The ID of the lesson.
-*   **Body:** `raw` (JSON)
+*   **Описание:** Обновляет запись прогресса для аутентифицированного администратора/модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `lessonId`: ID урока.
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
-      "completed": false
+      "isCompleted": false
     }
     ```
 
-### 7.5. Delete a progress record (Admin/Moderator only)
+### 7.5. Удалить запись прогресса (только для администраторов/модераторов)
 
-*   **Method:** `DELETE`
+*   **Метод:** `DELETE`
 *   **URL:** `{{baseUrl}}/progress/:lessonId`
-*   **Description:** Deletes a progress record. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Path Variables:**
-    *   `lessonId`: The ID of the lesson.
+*   **Описание:** Удаляет запись прогресса для аутентифицированного администратора/модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Параметры пути:**
+    *   `lessonId`: ID урока.
+
+### 7.6. Завершить все уроки по предмету (только для администраторов/модераторов)
+
+*   **Метод:** `POST`
+*   **URL:** `{{baseUrl}}/progress/complete-subject`
+*   **Описание:** Отмечает все уроки в заданном предмете как завершенные для конкретного пользователя. Это удобная конечная точка для администраторов/модераторов, облегчающая тестирование.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Тело:** `raw` (JSON)
+
+    ```json
+    {
+      "userId": "user-id-to-complete-for",
+      "subjectId": "subject-id-to-complete"
+    }
+    ```
 
 ---
 
-## 8. Certificates (`/certificates`)
+## 8. Сертификаты (`/certificates`)
 
-All endpoints require `Authorization` header with `Bearer <accessToken>`.
+Все конечные точки требуют заголовок `Authorization` с `Bearer <accessToken>`.
 
-### 8.1. Get all certificates (Admin only)
+### 8.1. Получить все сертификаты (только для администраторов)
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/certificates`
-*   **Description:** Retrieves a list of all certificates. Requires admin privileges.
-*   **Auth:** Bearer Token (from an admin user).
+*   **Описание:** Возвращает список всех сертификатов. Требует права администратора.
+*   **Auth:** Bearer Token (от администратора).
 
-### 8.2. Get certificates for a specific user
+### 8.2. Получить сертификаты для конкретного пользователя
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/certificates/user/:userId`
-*   **Description:** Retrieves all certificates for a specific user. Can be accessed by the user themselves or an admin.
+*   **Описание:** Возвращает все сертификаты для конкретного пользователя. Может быть доступен самим пользователем или администратором.
 *   **Auth:** Bearer Token.
-*   **Path Variables:**
-    *   `userId`: The ID of the user.
+*   **Параметры пути:**
+    *   `userId`: ID пользователя.
 
-### 8.3. Get a single certificate
+### 8.3. Получить один сертификат
 
-*   **Method:** `GET`
+*   **Метод:** `GET`
 *   **URL:** `{{baseUrl}}/certificates/:id`
-*   **Description:** Retrieves a single certificate by its ID. The user must be the owner of the certificate or an admin.
+*   **Описание:** Возвращает один сертификат по его ID. Пользователь должен быть владельцем сертификата или администратором.
 *   **Auth:** Bearer Token.
-*   **Path Variables:**
-    *   `id`: The ID of the certificate to retrieve.
+*   **Параметры пути:**
+    *   `id`: ID сертификата для получения.
 
-### 8.4. Create a new certificate (Admin/Moderator only)
+### 8.4. Создать новый сертификат (только для администраторов/модераторов)
 
-*   **Method:** `POST`
+*   **Метод:** `POST`
 *   **URL:** `{{baseUrl}}/certificates`
-*   **Description:** Creates a new certificate for a user upon successful completion of a subject. Requires admin or moderator privileges.
-*   **Auth:** Bearer Token (from an admin or moderator user).
-*   **Body:** `raw` (JSON)
+*   **Описание:** Создает новый сертификат для пользователя после успешного завершения предмета. Требует права администратора или модератора.
+*   **Auth:** Bearer Token (от администратора или модератора).
+*   **Тело:** `raw` (JSON)
 
     ```json
     {
@@ -493,68 +508,117 @@ All endpoints require `Authorization` header with `Bearer <accessToken>`.
     }
     ```
 
-### 8.5. Download Certificate PDF
+### 8.5. Скачать PDF сертификата
 
-*   **Method:** `GET`
-*   **URL:** `{{baseUrl}}/certificates/:id/download`
-*   **Description:** Generates and downloads a PDF certificate for the given ID. Can be accessed by the certificate owner or an admin.
+*   **Метод:** `GET`
+*   **URL:** `{{baseUrl}}`
+*   **Описание:** Генерирует и скачивает PDF сертификата по заданному ID. Может быть доступен владельцем сертификата или администратором.
 *   **Auth:** Bearer Token.
-*   **Path Variables:**
-    *   `id`: The ID of the certificate to download.
-*   **Usage in Postman:** Use the "Send and Download" option to save the response as a PDF file.
+*   **Параметры пути:**
+    *   `id`: ID сертификата для скачивания.
+*   **Использование в Postman:** Используйте опцию "Send and Download", чтобы сохранить ответ как PDF файл.
 
 ---
 
-## 9. Testing Certificate Generation
+## 9. Тестирование генерации сертификата
 
-This section describes the end-to-end flow for testing certificate generation.
+В этом разделе описывается сквозной процесс тестирования генерации сертификата.
 
-### Prerequisites
+### Шаг 1: Завершить все уроки для пользователя (как администратор/модератор)
 
-Before you begin, ensure you have the following data in your system:
-1.  A user with the `ADMIN` or `MODERATOR` role.
-2.  A user with the `STUDENT` role.
-3.  A `Subject` with at least one `Lesson`.
-4.  **Completed Progress**: The `STUDENT` must have completed all lessons within the `Subject`. This means a `UserProgress` record must exist for each lesson, linking the student to the lesson, with `isCompleted` set to `true`.
+Чтобы выдать сертификат, пользователь должен сначала завершить все уроки по предмету. Используйте удобную конечную точку, чтобы сделать это быстро.
 
-**Note on Creating Progress**: The `POST /progress` endpoint is restricted and marks progress for the authenticated user (the admin/moderator). To test for a specific student, you may need to either:
-a) Temporarily modify the endpoint to accept a `userId` in the body.
-b) Manually insert the `UserProgress` records into the database.
-
-### Step 1: Mark Lessons as Completed (as Admin/Moderator)
-
-1.  **Authenticate** as an Admin or Moderator by sending a `POST` request to `/auth/login` and get the `accessToken`.
-2.  For **each lesson** in the subject, send a `POST` request to `{{baseUrl}}/progress`.
-3.  **Header**: `Authorization: Bearer <your_admin_token>`
-4.  **Body**:
-    ```json
-    {
-      "lessonId": "the-lesson-id",
-      "completed": true
-    }
-    ```
-    *(Remember the limitation mentioned above regarding `userId`)*
-
-### Step 2: Create the Certificate Record (as Admin/Moderator)
-
-Once all lessons are marked as complete for the student, you can create the certificate record.
-
-1.  **Request**: `POST {{baseUrl}}/certificates`
-2.  **Header**: `Authorization: Bearer <your_admin_token>`
-3.  **Body**:
+1.  **Аутентифицируйтесь** как администратор или модератор, чтобы получить `accessToken`.
+2.  **Запрос**: `POST {{baseUrl}}/progress/complete-subject`
+3.  **Заголовок**: `Authorization: Bearer <your_admin_token>`
+4.  **Тело**: Укажите ID студента и ID предмета, который вы хотите отметить как завершенный.
     ```json
     {
       "userId": "student-user-id",
       "subjectId": "the-subject-id"
     }
     ```
-4.  **Response**: If successful, the API will return the certificate object. Copy the `id` from this response.
+5.  **Ответ**: API вернет количество созданных записей прогресса.
 
-### Step 3: Download the Certificate PDF
+### Шаг 2: Создать запись сертификата (как администратор/модератор)
 
-Finally, download the generated PDF to verify its contents.
+Теперь, когда предварительное условие выполнено, создайте сертификат.
 
-1.  **Request**: `GET {{baseUrl}}/certificates/<certificate_id>/download` (replace `<certificate_id>` with the ID from Step 2).
-2.  **Header**: `Authorization: Bearer <student_token_or_admin_token>` (can be downloaded by either the student or an admin).
-3.  **Action in Postman**: Click the arrow next to the "Send" button and choose **"Send and Download"**.
-4.  **Verify**: Postman will prompt you to save the file. Save it, then open the PDF to confirm that the student's name, subject title, and issue date are correct.
+1.  **Запрос**: `POST {{baseUrl}}/certificates`
+2. **Заголовок**: `Authorization: Bearer <your_admin_token>`
+3.  **Тело**:
+    ```json
+    {
+      "userId": "student-user-id",
+      "subjectId": "the-subject-id"
+    }
+    ```
+4.  **Ответ**: При успешном выполнении API вернет объект сертификата. Скопируйте `id` из этого ответа.
+
+### Шаг 3: Скачать PDF сертификата
+
+Наконец, скачайте сгенерированный PDF, чтобы проверить его содержимое.
+
+1.  **Запрос**: `GET {{baseUrl}}/certificates/<certificate_id>/download` (замените `<certificate_id>` на ID из шага 2).
+2.  **Заголовок**: `Authorization: Bearer <student_token_or_admin_token>` (может быть скачан как студентом, так и администратором).
+3.  **Действие в Postman**: Нажмите стрелку рядом с кнопкой "Send" и выберите **"Send and Download"**.
+4.  **Проверка**: Postman предложит вам сохранить файл. Сохраните его, затем откройте PDF, чтобы убедиться, что имя студента, название предмета и дата выдачи указаны правильно.
+
+---
+
+## 10. Тестирование завершения всех уроков
+
+В этом разделе описывается процесс тестирования завершения всех уроков в предмете.
+
+### Шаг 1: Подготовка тестовых данных
+
+1. Убедитесь, что у вас есть пользователь с ролью `ADMIN` или `MODERATOR`.
+2.  Убедитесь, что у вас есть пользователь с ролью `STUDENT`.
+3.  Убедитесь, что у вас есть `Subject` с хотя бы одним `Lesson`.
+4.  Убедитесь, что у вас есть доступ к ID всех уроков в выбранном предмете.
+
+### Шаг 2: Завершить все уроки для студента (как администратор/модератор)
+
+Используйте удобную конечную точку для быстрого завершения всех уроков по предмету:
+
+1.  **Аутентифицируйтесь** как администратор или модератор, чтобы получить `accessToken`.
+2.  **Запрос**: `POST {{baseUrl}}/progress/complete-subject`
+3.  **Заголовок**: `Authorization: Bearer <your_admin_token>`
+4.  **Тело**: Укажите ID студента и ID предмета, все уроки в котором нужно завершить.
+    ```json
+    {
+      "userId": "student-user-id",
+      "subjectId": "the-subject-id"
+    }
+    ```
+5.  **Ответ**: API вернет количество созданных записей прогресса. Убедитесь, что количество совпадает с количеством уроков в предмете.
+
+### Шаг 3: Проверить статус прогресса студента
+
+1.  **Запрос**: `GET {{baseUrl}}/progress`
+2.  **Заголовок**: `Authorization: Bearer <student_token>`
+3.  **Ответ**: Проверьте, что все уроки в интересующем предмете отмечены как завершенные (`isCompleted: true`).
+
+### Шаг 4: Проверить завершение предмета через викторину (альтернативный способ)
+
+1.  **Аутентифицируйтесь** как студент.
+2.  **Запрос**: `POST {{baseUrl}}/quizzes/:id/submit` (где `:id` - ID викторины, связанной с последним уроком в предмете).
+3.  **Заголовок**: `Authorization: Bearer <student_token>`
+4.  **Тело**: Правильные ответы на все вопросы викторины.
+5.  **Ответ**: При успешном прохождении викторины с оценкой 100%, урок должен быть автоматически отмечен как завершенный.
+
+### Шаг 5: Создание сертификата (если все уроки завершены)
+
+Если все уроки в предмете завершены, можно создать сертификат:
+
+1.  **Аутентифицируйтесь** как администратор или модератор.
+2.  **Запрос**: `POST {{baseUrl}}/certificates`
+3.  **Заголовок**: `Authorization: Bearer <your_admin_token>`
+4.  **Тело**:
+    ```json
+    {
+      "userId": "student-user-id",
+      "subjectId": "the-subject-id"
+    }
+    ```
+5.  **Ответ**: При успешном выполнении будет создан сертификат, подтверждающий завершение предмета.
